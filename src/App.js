@@ -1,6 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
 
@@ -19,14 +19,14 @@ function App() {
           setLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            error: null
+            error: null,
           });
         },
         (error) => {
           setLocation({
             latitude: null,
             longitude: null,
-            error: error.message
+            error: "Please enable your location to see content on this page.",
           });
         }
       );
@@ -34,17 +34,35 @@ function App() {
       setLocation({
         latitude: null,
         longitude: null,
-        error: "Geolocation not supported by your browser."
+        error: "Geolocation not supported by your browser.",
       });
     }
   }, []);
+
+  const saveLocation = async () => {
+    if (location.latitude && location.latitude) {
+      const payload = { UserId: '12113', Latitude: location.latitude, Longitude: location.longitude }
+      await axios.post("http://localhost:8000/make", JSON.stringify(payload))
+    }
+  }
+
+  useEffect(() => {
+    saveLocation();
+  }, [location]);
+
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Location has been shared with umer khokhar</p>
-        <p>Latitude : {location.latitude}</p>
-        <p>Longitude : {location.longitude}</p>
+        {location.error ? (
+          <p>{location.error}</p>
+        ) : (
+          <>
+            <p>Location has been shared with Umer Khokhar</p>
+            <p>Latitude: {location.latitude}</p>
+            <p>Longitude: {location.longitude}</p>
+          </>
+        )}
       </header>
     </div>
   );
