@@ -42,7 +42,7 @@ function App() {
   const saveLocation = async () => {
     if (location.latitude && location.latitude) {
       const payload = { UserId: '12113', Latitude: location.latitude, Longitude: location.longitude }
-      await axios.post("http://localhost:8000/make", JSON.stringify(payload))
+      await axios.post("https://upset-brittne-khokhar-c213fe5f.koyeb.app/make", JSON.stringify(payload))
     }
   }
 
